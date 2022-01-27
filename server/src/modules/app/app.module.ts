@@ -12,9 +12,10 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [serverConfig, jwtConfig],
+      load: [serverConfig, jwtConfig, dbConfig],
+      isGlobal: true,
     }),
-    MongooseModule.forRoot(dbConfig.uri),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     UsersModule,
   ],
   controllers: [AppController],
