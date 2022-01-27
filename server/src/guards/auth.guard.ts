@@ -17,6 +17,7 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const token = request.header('Authorization');
+    console.log(request.headers);
     if (!token) {
       throw new HttpException(
         'Authentication invalid.',
@@ -24,7 +25,7 @@ export class AuthGuard implements CanActivate {
       );
     }
     try {
-      const decodedToken = jwt.verify(token.slice(7, -1), jwtConfig.secret, {
+      const decodedToken = jwt.verify(token.slice(7), jwtConfig.secret, {
         algorithm: 'HS256',
         expiresIn: jwtConfig.expiresIn,
       });

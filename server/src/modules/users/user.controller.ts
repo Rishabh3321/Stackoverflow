@@ -8,6 +8,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { Request as req } from 'express';
 import { Model } from 'mongoose';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -23,6 +24,7 @@ export class UserController {
     @InjectModel(User.name) private readonly user: Model<UserDocument>,
   ) {}
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get()
   getHello(@Request() req: req): string {
@@ -57,6 +59,7 @@ export class UserController {
       token,
     };
   }
+
   @Post('/login')
   async login(@Body() data: LoginUserDto) {
     const user = await this.userService.login(data);
