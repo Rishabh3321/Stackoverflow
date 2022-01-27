@@ -7,8 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import * as jwt from 'jsonwebtoken';
-import jwtConfig from 'src/config/jwt.config';
+import { AuthService } from 'src/modules/auth/auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -25,10 +24,7 @@ export class AuthGuard implements CanActivate {
       );
     }
     try {
-      const decodedToken = jwt.verify(token.slice(7), jwtConfig.secret, {
-        algorithm: 'HS256',
-        expiresIn: jwtConfig.expiresIn,
-      });
+      const decodedToken = AuthService;
       console.log(decodedToken);
       request['user'] = decodedToken;
       return true;

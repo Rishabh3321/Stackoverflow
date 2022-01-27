@@ -5,11 +5,12 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import serverConfig from './config/server.config';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './modules/app/app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -35,6 +36,7 @@ async function bootstrap() {
   };
   SwaggerModule.setup('api', app, document, customOptions);
 
-  await app.listen(serverConfig.port);
+  const configService = app.get<ConfigService>(ConfigService);
+  await app.listen(configService.get('server.port'));
 }
 bootstrap();

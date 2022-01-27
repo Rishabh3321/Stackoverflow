@@ -12,7 +12,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { Request as req } from 'express';
 import { Model } from 'mongoose';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { createToken } from 'src/utils/authentication';
+import { AuthService } from '../auth/auth.service';
 import { LoginUserDto, RegisterUserDto } from './user.dto';
 import { User, UserDocument } from './user.entity';
 import { UserService } from './user.service';
@@ -21,6 +21,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(
     private userService: UserService,
+    private authService: AuthService,
     @InjectModel(User.name) private readonly user: Model<UserDocument>,
   ) {}
 
@@ -51,7 +52,7 @@ export class UserController {
       );
     }
     const newUser = await this.userService.create(data);
-    const token = createToken(newUser);
+    const token = this.authService.createToken(newUser);
 
     return {
       message: 'Registration Successful',
@@ -63,7 +64,7 @@ export class UserController {
   @Post('/login')
   async login(@Body() data: LoginUserDto) {
     const user = await this.userService.login(data);
-    const token = createToken(user);
+    const token = this.authService.createToken(user);
     return {
       message: 'Login Successful',
       details: user,

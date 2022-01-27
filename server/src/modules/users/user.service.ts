@@ -1,7 +1,7 @@
 import { HttpException, Injectable, Scope } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { hashPassword, verifyPassword } from 'src/utils/authentication';
+import { AuthService } from '../auth/auth.service';
 import { LoginUserDto, RegisterUserDto } from './user.dto';
 import { User, UserDocument } from './user.entity';
 
@@ -9,6 +9,7 @@ import { User, UserDocument } from './user.entity';
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly user: Model<UserDocument>,
+    private authService: AuthService,
   ) {}
 
   getHello(userId: string): string {
@@ -16,7 +17,7 @@ export class UserService {
   }
 
   async create(data: RegisterUserDto): Promise<UserDocument> {
-    data.password = await hashPassword(data.password);
+    data.password = await this.authService.hashPassword(data.password);
     let newUser = new this.user(data);
     try {
       newUser = await newUser.save();
@@ -32,7 +33,8 @@ export class UserService {
     if (!userByEmail) {
       throw new HttpException(`No user found with ${data.email}`, 409);
     }
-    if (verifyPassword(data.password, userByEmail.password)) return userByEmail;
+    if (this.authService.verifyPassword(data.password, userByEmail.password))
+      return userByEmail;
     else throw new HttpException(`Invalid Password`, 409);
   }
 }
