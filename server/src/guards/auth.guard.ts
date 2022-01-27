@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -11,6 +12,8 @@ import { AuthService } from 'src/modules/auth/auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  constructor(private authService: AuthService) {}
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -24,7 +27,7 @@ export class AuthGuard implements CanActivate {
       );
     }
     try {
-      const decodedToken = AuthService;
+      const decodedToken = this.authService.verifyToken(token);
       console.log(decodedToken);
       request['user'] = decodedToken;
       return true;

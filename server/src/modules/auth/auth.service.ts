@@ -1,17 +1,17 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class AuthService {
   jwtConfig: { secret: string; expiresIn: string };
 
   constructor(private configService: ConfigService) {
-    console.log(this.configService);
     this.jwtConfig = {
       secret: this.configService.get('jwt.secret'),
       expiresIn: this.configService.get('jwt.expiresIn'),
     };
-    console.log(this.jwtConfig);
   }
 
   hashPassword = (password: string): Promise<string> => {
@@ -32,16 +32,14 @@ export class AuthService {
   };
 
   createToken = (user) => {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
     return jwt.sign(
       {
         id: user._id,
         email: user.email,
         username: user.username,
       },
-      self.jwtConfig.secret,
-      { algorithm: 'HS256', expiresIn: self.jwtConfig.expiresIn },
+      this.jwtConfig.secret,
+      { algorithm: 'HS256', expiresIn: this.jwtConfig.expiresIn },
     );
   };
 
