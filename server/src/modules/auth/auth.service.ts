@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 export class AuthService {
   jwtConfig: { secret: string; expiresIn: string };
+
   constructor(private configService: ConfigService) {
     console.log(this.configService);
     this.jwtConfig = {
