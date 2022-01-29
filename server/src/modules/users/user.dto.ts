@@ -14,9 +14,5 @@ export class LoginUserDto {
 
 export class RegisterUserDto extends LoginUserDto {
   @ApiProperty()
-  @MaxLength(15)
-  username: string;
-
-  @ApiProperty()
   name: string;
 }

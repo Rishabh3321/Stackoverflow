@@ -4,4 +4,6 @@
 */*.log
 */.env
 .vscode
+*/yarn-error.log
+
 

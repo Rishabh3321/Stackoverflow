@@ -35,19 +35,9 @@ export class UserController {
   @Post('/register')
   async register(@Body() data: RegisterUserDto) {
     const userByEmail = await this.user.findOne({ email: data.email }).exec();
-    const userByUsername = await this.user
-      .findOne({ username: data.username })
-      .exec();
-
     if (userByEmail) {
       throw new HttpException(
         `User already registered with ${data.email}`,
-        409,
-      );
-    }
-    if (userByUsername) {
-      throw new HttpException(
-        `User already registered with ${data.username}`,
         409,
       );
     }

@@ -3,7 +3,6 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -19,7 +18,7 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const token = request.header('Authorization');
-    console.log(request.headers);
+
     if (!token) {
       throw new HttpException(
         'Authentication invalid.',
@@ -28,7 +27,6 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const decodedToken = this.authService.verifyToken(token);
-      console.log(decodedToken);
       request['user'] = decodedToken;
       return true;
     } catch (err) {

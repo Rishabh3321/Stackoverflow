@@ -8,48 +8,45 @@ A typical implementation of Stackoverflow platform.
 
 - User:
 
-    - id: id
-    - name: string
-    - email: string
-    - username: string
-    - password: string
-    - reputation: integer
-    - questions: [id]
-    - answers: [id]
-    - role: string
-    - created_at: timestamp
-    - updated_at: timestamp
-
-
+  - id: id
+  - name: string
+  - email: string
+  - password: string
+  - reputation: integer
+  - questions: [id]
+  - answers: [id]
+  - role: string
+  - created_at: timestamp
+  - updated_at: timestamp
 
 - Question:
-    - id: id
-    - version :
-        - title: string
-        - body : string
-        - user_id: id
-    - vote:
-        - user_id : integer
-        - action : Boolean
-    - views: integer
-    - answers: [id]
-    - accepted_answer_id: id
-    - created_at: timestamp
-    - updated_at: timestamp
 
+  - id: id
+  - version :
+    - title: string
+    - body : string
+    - user_id: id
+  - vote:
+    - user_id : integer
+    - action : Boolean
+  - views: integer
+  - answers: [id]
+  - accepted_answer_id: id
+  - created_at: timestamp
+  - updated_at: timestamp
 
 - Answer:
 
-    - id: id
-    - question_id: id
-    - version:
-        - body: string
-        - user_id: id
-    - vote:
-        - user_id : integer
-        - action : Boolean
-    - created_at: timestamp
-    - updated_at: timestamp
+  - id: id
+  - question_id: id
+  - version:
+    - body: string
+    - user_id: id
+  - vote:
+    - user_id : integer
+    - action : Boolean
+  - created_at: timestamp
+  - updated_at: timestamp
 
 `Vote` will be extracted as a seprated schema and `Version` will be specialised schemas.
 
