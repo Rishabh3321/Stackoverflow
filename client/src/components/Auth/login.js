@@ -1,30 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import { loginUser } from "../../actions/authActions";
 import IconSvg from "../../assets/svg/icon.svg";
 import Button from "../Button";
-import api from "../../services/api";
-import { login } from "../../utils/auth";
 
-function LoginForm() {
-	const [email, setEmail] = React.useState("");
-	const [password, setPassword] = React.useState("");
+function LoginForm({ loginUser, isAuthenticated }) {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	const history = useHistory();
 
-	const onSubmit = async (e) => {
+	const onSubmit = async () => {
 		const body = {
 			email,
 			password,
 		};
 
 		try {
-			const response = await api.post("/users/login", body);
-			console.log(response);
-			if (response.data.token) login(response.data.token);
-			history.push("/dashboard");
+			await loginUser(body);
 		} catch (err) {
 			console.log(err);
 		}
 	};
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			history.push("/dashboard");
+		}
+	}, [history, isAuthenticated]);
 
 	return (
 		<div className="w-full flex flex-wrap justify-center items-center pt-20">
@@ -65,4 +68,10 @@ function LoginForm() {
 	);
 }
 
-export default LoginForm;
+const mapStateToProps = (state) => {
+	return {
+		isAuthenticated: state.auth.isAuthenticated,
+	};
+};
+
+export default connect(mapStateToProps, { loginUser })(LoginForm);

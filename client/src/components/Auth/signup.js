@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import IconSvg from "../../assets/svg/icon.svg";
-import api from "../../services/api";
 import Button from "../Button";
-import { login } from "../../utils/auth";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
 
-function SignupForm() {
+function SignupForm({ isAuthenticated, registerUser }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [name, setName] = useState("");
@@ -19,14 +19,17 @@ function SignupForm() {
 		};
 
 		try {
-			const response = await api.post("/users/register", body);
-			console.log(response);
-			if (response.data.token) login(response.data.token);
-			history.push("/dashboard");
+			registerUser(body);
 		} catch (err) {
 			console.log(err);
 		}
 	};
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			history.push("/dashboard");
+		}
+	}, [isAuthenticated, history]);
 
 	return (
 		<div className="w-full flex flex-wrap justify-center items-center pt-10">
@@ -73,4 +76,8 @@ function SignupForm() {
 	);
 }
 
-export default SignupForm;
+const mapStateToProps = (state) => ({
+	isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { registerUser })(SignupForm);

@@ -1,43 +1,44 @@
 import jwtDecode from "jwt-decode";
+import { logoutUser, setCurrentUser } from "../actions/authActions";
+import { setApiAuthToken } from "../services/api";
+import store from "../store";
 
-const TOKEN_KEY = "jwt";
+export const TOKEN_KEY = "jwt";
+export const USERDATA_KEY = "userData";
 
-export const login = (token) => {
+export const login = (token, userData) => {
 	localStorage.setItem(TOKEN_KEY, token);
+	localStorage.setItem(USERDATA_KEY, JSON.stringify(userData));
 };
 
 export const logout = () => {
 	localStorage.removeItem(TOKEN_KEY);
+	localStorage.removeItem(USERDATA_KEY);
 };
 
 export const isLogin = () => {
 	if (localStorage.getItem(TOKEN_KEY)) {
 		return true;
 	}
-
 	return false;
 };
 
 export const checkToken = () => {
-	// check for token to keep user logged in
 	if (localStorage.getItem(TOKEN_KEY)) {
-		// set auth token header auth
 		const token = localStorage.getItem(TOKEN_KEY);
-		// setAuthToken(token);
-		// decode token and get user info and expiry
+		const userData = JSON.parse(localStorage.getItem(USERDATA_KEY));
+
+		setApiAuthToken(token);
 		const decoded = jwtDecode(token);
-		// set user and isAuthenticated
-		// store.dispatch(setCurrentUser(decoded));
-		console.log(token, decoded);
-		// check for expired token
-		const currentTime = Date.now() / 1000; // time in millisecs
+		store.dispatch(setCurrentUser({ ...decoded, ...userData }));
+
+		const currentTime = Date.now() / 1000;
 		if (decoded.exp < currentTime) {
-			// logout user
-			// store.dispatch(logoutUser());
-			// redirect to login
+			store.dispatch(logoutUser());
 			window.location.href = "./login";
 			return false;
 		}
+
 		return true;
 	}
 };
