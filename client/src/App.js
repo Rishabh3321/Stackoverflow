@@ -11,8 +11,8 @@ function App() {
 
 	return (
 		<Provider store={store}>
-			<div className="bg-[#f1f2f3]">
-				<Routes></Routes>
+			<div className="bg-base-gray">
+				<Routes />
 			</div>
 		</Provider>
 	);

@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import { logoutUser, setCurrentUser } from "../actions/authActions";
+import { logoutUser, setCurrentUser } from "../actions/auth.actions";
 import { setApiAuthToken } from "../services/api";
 import store from "../store";
 

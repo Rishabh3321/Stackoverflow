@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import IconSvg from "../../assets/svg/icon.svg";
 import Button from "../Button";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
+import { registerUser } from "../../actions/auth.actions";
 
 function SignupForm({ isAuthenticated, registerUser }) {
 	const [email, setEmail] = useState("");
@@ -27,7 +27,7 @@ function SignupForm({ isAuthenticated, registerUser }) {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			history.push("/dashboard");
+			history.push("/");
 		}
 	}, [isAuthenticated, history]);
 

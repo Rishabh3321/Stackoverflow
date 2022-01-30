@@ -12,10 +12,6 @@ export class UserService {
     private authService: AuthService,
   ) {}
 
-  getHello(userId: string): string {
-    return `Hello World! ${userId}`;
-  }
-
   async create(data: RegisterUserDto): Promise<UserDocument> {
     data.password = await this.authService.hashPassword(data.password);
     let newUser = new this.user(data);
@@ -36,5 +32,15 @@ export class UserService {
     if (this.authService.verifyPassword(data.password, userByEmail.password))
       return userByEmail;
     else throw new HttpException(`Invalid Password`, 409);
+  }
+
+  async findAll(): Promise<UserDocument[]> {
+    return await this.user
+      .find({}, 'name email id createdAt reputation')
+      .exec();
+  }
+
+  async findOne(id: string): Promise<UserDocument> {
+    return await this.user.findById(id).exec();
   }
 }

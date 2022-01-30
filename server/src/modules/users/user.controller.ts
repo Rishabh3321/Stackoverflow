@@ -1,17 +1,13 @@
 import {
+  Body,
   Controller,
   Get,
-  UseGuards,
-  Request,
-  Post,
-  Body,
   HttpException,
+  Param,
+  Post,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { Request as req } from 'express';
 import { Model } from 'mongoose';
-import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { LoginUserDto, RegisterUserDto } from './user.dto';
 import { User, UserDocument } from './user.entity';
@@ -24,13 +20,6 @@ export class UserController {
     private authService: AuthService,
     @InjectModel(User.name) private readonly user: Model<UserDocument>,
   ) {}
-
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Get()
-  getHello(@Request() req: req): string {
-    return this.userService.getHello(req['user-id']);
-  }
 
   @Post('/register')
   async register(@Body() data: RegisterUserDto) {
@@ -60,5 +49,15 @@ export class UserController {
       details: user,
       token,
     };
+  }
+
+  @Get('')
+  async findAll() {
+    return await this.userService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.userService.findOne(id);
   }
 }

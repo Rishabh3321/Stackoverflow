@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { loginUser } from "../../actions/authActions";
+import { loginUser } from "../../actions/auth.actions";
 import IconSvg from "../../assets/svg/icon.svg";
 import Button from "../Button";
 
@@ -25,7 +25,7 @@ function LoginForm({ loginUser, isAuthenticated }) {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			history.push("/dashboard");
+			history.push("/");
 		}
 	}, [history, isAuthenticated]);
 

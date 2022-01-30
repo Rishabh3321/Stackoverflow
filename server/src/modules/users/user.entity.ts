@@ -24,6 +24,9 @@ export class User {
 
   @Prop({ type: [Types.ObjectId] })
   answers: [Types.ObjectId];
+
+  @Prop({ default: Date.now() })
+  createdAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

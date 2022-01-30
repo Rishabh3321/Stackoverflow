@@ -9,6 +9,10 @@ module.exports = {
 				"blue-border-light": "#7aa7c7",
 				"blue-hover-light": "#b3d3ea",
 				"blue-hover-dark": "#0074cc",
+				"base-gray": "#f1f2f3",
+			},
+			fontFamily: {
+				sans: ["Roboto", "Helvetica", "Arial", "sans-serif"],
 			},
 		},
 	},
