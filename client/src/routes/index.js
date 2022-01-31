@@ -6,7 +6,7 @@ import Login from "../pages/login";
 import Signup from "../pages/signup";
 import PrivateRoute from "./private-route";
 import Profile from "../pages/profile";
-import AskQuestion from "../pages/ask-question.";
+import AskQuestion from "../pages/ask-question";
 
 function Routes() {
 	return (
