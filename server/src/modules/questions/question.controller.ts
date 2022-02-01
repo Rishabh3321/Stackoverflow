@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Model } from 'mongoose';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthService } from '../auth/auth.service';
+import { PaginationQueryDto } from '../common/pagination-query.dto';
 import { RawQuestionDto } from './question.dto';
 import { Question, QuestionDocument } from './question.entity';
 import { QuestionService } from './question.service';
@@ -17,8 +26,8 @@ export class QuestionController {
   ) {}
 
   @Get('')
-  async findAll() {
-    return await this.questionService.findAll();
+  async findAll(@Query() query: PaginationQueryDto) {
+    return await this.questionService.findAll(query);
   }
 
   @Get(':id')
@@ -31,5 +40,19 @@ export class QuestionController {
   @Post('/create')
   async create(@Body() data: RawQuestionDto) {
     return await this.questionService.create(data);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Post('/:id/upvote')
+  async vote(@Param('id') id: string) {
+    return await this.questionService.upvote(id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Post('/:id/downvote')
+  async downvote(@Param('id') id: string) {
+    return await this.questionService.downvote(id);
   }
 }

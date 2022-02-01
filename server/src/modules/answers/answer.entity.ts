@@ -35,7 +35,7 @@ export const AnswerSchema = SchemaFactory.createForClass(Answer);
 
 AnswerSchema.method('toJSON', function () {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { __v, _id, votes, ...object } = this.toObject();
+  const { __v, _id, ...object } = this.toObject();
 
   object.id = _id;
   return object;
