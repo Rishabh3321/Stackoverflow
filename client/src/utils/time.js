@@ -31,4 +31,8 @@ function millisecondsToStr(milliseconds) {
 	return "less than a second"; //'just now' //or other string you like;
 }
 
+export const timeElapsed = (time) => {
+	return millisecondsToStr(new Date().getTime() - new Date(time).getTime());
+};
+
 export default millisecondsToStr;

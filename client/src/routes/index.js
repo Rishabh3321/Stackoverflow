@@ -7,6 +7,7 @@ import Signup from "../pages/signup";
 import PrivateRoute from "./private-route";
 import Profile from "../pages/profile";
 import AskQuestion from "../pages/ask-question";
+import Question from "../pages/question";
 
 function Routes() {
 	return (
@@ -17,6 +18,7 @@ function Routes() {
 				<Route exact path="/signup" component={Signup} />
 				<Route path="/users/:id" component={Profile} />
 				<Route exact path="/users" component={Users} />
+				<Route path="/question/:id" component={Question} />
 				<PrivateRoute exact path="/ask-question" component={AskQuestion} />
 			</Switch>
 		</BrowserRouter>

@@ -4,8 +4,8 @@ import { Link, useHistory } from "react-router-dom";
 import { fetchAllQuestions } from "../actions/questions.action";
 import Button from "../components/Button";
 import Layout from "../components/Layout";
-import { getAvatar } from "../utils/common";
-import millisecondsToStr from "../utils/time";
+import MiniProfile from "../components/Profile/mini-profile";
+import { pluralize } from "../utils/common";
 
 function Home({ questions, isFetched, fetchAllQuestions }) {
 	const history = useHistory();
@@ -16,16 +16,9 @@ function Home({ questions, isFetched, fetchAllQuestions }) {
 		}
 	});
 
-	const timeElapsed = (time) => {
-		return (
-			"asked " +
-			millisecondsToStr(new Date().getTime() - new Date(time).getTime())
-		);
-	};
-
 	return (
 		<Layout>
-			<div className="flex pt-14">
+			<div className="flex pt-10">
 				<div className="w-10/12">
 					<div className="border-b-2 border-b-gray-300">
 						<div className="pl-10 w-full flex justify-between">
@@ -42,9 +35,7 @@ function Home({ questions, isFetched, fetchAllQuestions }) {
 						<div className="pl-10 py-5">
 							{isFetched ? (
 								<span className="block w-full">
-									{questions.length +
-										" question" +
-										(questions.length > 1 ? "s" : "")}
+									{questions.length + pluralize(questions.length, " question")}
 								</span>
 							) : (
 								<span> Loading... </span>
@@ -69,14 +60,18 @@ function Home({ questions, isFetched, fetchAllQuestions }) {
 											<div className="w-1/12 font-light text-gray-light">
 												<div className="w-full text-center m-1">
 													<div>{votes}</div>
-													<div className="text-xs">Votes</div>
+													<div className="text-xs">
+														{pluralize(votes, " Vote")}
+													</div>
 												</div>
 												<div className="w-full text-center m-1">
 													<div>{answers}</div>
-													<div className="text-xs">Answers</div>
+													<div className="text-xs">
+														{pluralize(answers, " Answer")}
+													</div>
 												</div>
 												<div className="w-full text-sm text-center mt-4">
-													{views + " view" + (views > 1 ? "s" : "")}
+													{views + pluralize(views, " view")}
 												</div>
 											</div>
 											<div className="w-11/12 pl-5 text-sm">
@@ -88,27 +83,13 @@ function Home({ questions, isFetched, fetchAllQuestions }) {
 												</Link>
 												<div className="font-sans text-gray-light">{body}</div>
 												<div className="mt-2 flex justify-end">
-													<div>
-														<span className="text-xs w-full text-center text-gray-800">
-															{timeElapsed(question.createdAt)}
-														</span>
-														<Link
-															className="mt-1 flex gap-2"
-															to={`users/${user_id}`}
-														>
-															<img
-																src={getAvatar(email, "tiny")}
-																alt="avatar"
-															/>
-															<div className="text-primary-blue text-xs">
-																<span>{name}</span>
-																<div className="flex items-center">
-																	<div className="m-2 border-2 border-primary-orange bg-primary-orange w-2 h-2 rounded-full" />
-																	<span> {reputation}</span>
-																</div>
-															</div>
-														</Link>
-													</div>
+													<MiniProfile
+														user_id={user_id}
+														name={name}
+														reputation={reputation}
+														email={email}
+														createdAt={question.createdAt}
+													/>
 												</div>
 											</div>
 										</div>

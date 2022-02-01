@@ -18,7 +18,7 @@ function sidebar({ selected = "home" }) {
 
 	return (
 		<div className="nav border border-r-gray-300">
-			<div className="flex flex-wrap justify-end pt-10">
+			<div className="flex flex-wrap justify-end pt-6">
 				<div>
 					{sections.map((section) => (
 						<Link

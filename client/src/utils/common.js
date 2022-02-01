@@ -12,3 +12,17 @@ export const getAvatar = (email, size = "small") => {
 		${sparkMD5.hash(email)} +
 		"?s=${sizeobj[size]}&d=identicon`;
 };
+
+export const pluralize = (count, word) => {
+	return count <= 1 ? word : word + "s";
+};
+
+export const countVote = (votes) => {
+	return votes.reduce((acc, vote) => {
+		if (vote.action) {
+			return acc + 1;
+		} else {
+			return acc - 1;
+		}
+	}, 0);
+};
