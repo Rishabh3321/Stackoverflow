@@ -26,7 +26,7 @@ export class UserController {
     const userByEmail = await this.user.findOne({ email: data.email }).exec();
     if (userByEmail) {
       throw new HttpException(
-        `User already registered with ${data.email}`,
+        `User already registered with ${data.email}, try loging in`,
         409,
       );
     }

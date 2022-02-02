@@ -8,9 +8,9 @@ const sizeobj = {
 };
 
 export const getAvatar = (email, size = "small") => {
-	return `https://www.gravatar.com/avatar/" +
-		${sparkMD5.hash(email)} +
-		"?s=${sizeobj[size]}&d=identicon`;
+	return `https://www.gravatar.com/avatar/${sparkMD5.hash(email)}?s=${
+		sizeobj[size]
+	}&d=identicon`;
 };
 
 export const pluralize = (count, word) => {

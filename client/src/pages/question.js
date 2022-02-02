@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
 import downvoteSvg from "../assets/svg/downvote.svg";
 import upvoteSvg from "../assets/svg/upvote.svg";
@@ -9,8 +10,10 @@ import MiniProfileWrapper from "../components/Profile/mini-profile-wrapper";
 import api from "../services/api";
 import { countVote, pluralize } from "../utils/common";
 import { timeElapsed } from "../utils/time";
+import toast from "../utils/toast";
+import { incrementQuestionViews } from "../actions/questions.action";
 
-function Question() {
+function Question({ incrementQuestionViews }) {
 	const history = useHistory();
 	const { id } = useParams();
 	const [question, setQuestion] = useState(null);
@@ -25,36 +28,25 @@ function Question() {
 	useEffect(() => {
 		if (id) {
 			fetchQuestion();
+			incrementQuestionViews(id);
 		}
-	}, [id, fetchQuestion]);
+	}, [id, fetchQuestion, incrementQuestionViews]);
 
 	useEffect(() => {
 		setForceUpdate((f) => f + 1);
 	}, [question]);
 
-	const handleUpvote = async () => {
+	const handleVoting = async (vote) => {
 		try {
-			const { data } = await api.post(`/question/${id}/upvote`);
+			const { data } = await api.post(`/question/${id}/${vote}`);
 			if (data.name === "HttpException") {
-				console.log(data.message);
+				toast.error(data.message);
 			} else {
 				setQuestion(data);
+				toast.success(`You ${vote}d the question!`);
 			}
 		} catch (err) {
-			console.log(err);
-		}
-	};
-
-	const handleDownvote = async () => {
-		try {
-			const { data } = await api.post(`/question/${id}/downvote`);
-			if (data.name === "HttpException") {
-				console.log(data.message);
-			} else {
-				setQuestion(data);
-			}
-		} catch (err) {
-			console.log(err);
+			toast.error("Something went wrong");
 		}
 	};
 
@@ -64,12 +56,23 @@ function Question() {
 				question_id: id,
 				body: answer,
 			});
+
 			if (status !== 201) {
+				toast.error(data.message);
 				console.log(data.message);
 			} else {
+				toast.success(`You answered the question!`);
+				setAnswer("");
+				setQuestion({
+					...question,
+					answers: [data.id, ...question.answers],
+				});
 				console.log(data);
 			}
-		} catch (error) {}
+		} catch (error) {
+			console.log(error);
+			toast.error("Something went wrong");
+		}
 	};
 
 	const countVoteHandler = useCallback(() => {
@@ -107,7 +110,7 @@ function Question() {
 									src={upvoteSvg}
 									alt="upvote"
 									className="cursor-pointer"
-									onClick={() => handleUpvote()}
+									onClick={() => handleVoting("upvote")}
 								/>
 								<p className="pl-3 text-2xl text-gray-title">
 									{countVoteHandler()}
@@ -116,12 +119,12 @@ function Question() {
 									src={downvoteSvg}
 									alt="downvote"
 									className="cursor-pointer"
-									onClick={() => handleDownvote()}
+									onClick={() => handleVoting("downvote")}
 								/>
 							</div>
 
 							<div className="w-11/12">
-								<h3 className="text-base font-light text-gray-title">
+								<h3 className=" text-gray-title text-base font-normal break-words whitespace-pre-wrap">
 									{question.versions.at(-1).body}
 								</h3>
 								{question.versions.at(-1).user_id ? (
@@ -192,4 +195,4 @@ function Question() {
 	);
 }
 
-export default Question;
+export default connect(null, { incrementQuestionViews })(Question);

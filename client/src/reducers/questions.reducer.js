@@ -1,4 +1,7 @@
-import { FETCH_ALL_QUESTIONS } from "../actions/types";
+import {
+	FETCH_ALL_QUESTIONS,
+	INCREMENT_QUESTION_VIEWS,
+} from "../actions/types";
 
 const initialState = {
 	isFetched: false,
@@ -13,6 +16,21 @@ export default function init(state = initialState, action) {
 				isFetched: action.payload.length > 0,
 				data: action.payload,
 			};
+		case INCREMENT_QUESTION_VIEWS: {
+			console.log("incrementQuestionViews", action.payload);
+			const otherQuestions = state.data.map(
+				(question) => question.id !== action.payload.id
+			);
+			const viewdQuestion = state.data.find(
+				(question) => question.id === action.payload.id
+			);
+			viewdQuestion.views = action.payload.views;
+			return {
+				...state,
+				data: [...otherQuestions, viewdQuestion],
+			};
+		}
+
 		default:
 			return state;
 	}

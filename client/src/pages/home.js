@@ -74,14 +74,16 @@ function Home({ questions, isFetched, fetchAllQuestions }) {
 													{views + pluralize(views, " view")}
 												</div>
 											</div>
-											<div className="w-11/12 pl-5 text-sm">
+											<div className="w-11/12 pl-5">
 												<Link
 													to={`question/${question._id}`}
-													className="font-sans font-normal text-primary-blue "
+													className="font-sans font-normal text-primary-blue text-lg"
 												>
 													{title}
 												</Link>
-												<div className="font-sans text-gray-light">{body}</div>
+												<div className="font-sans text-gray-800 text-base break-words whitespace-pre-wrap">
+													{body.slice(0, 250) + "..."}
+												</div>
 												<div className="mt-2 flex justify-end">
 													<MiniProfile
 														user_id={user_id}

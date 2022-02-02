@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -54,5 +55,10 @@ export class QuestionController {
   @Post('/:id/downvote')
   async downvote(@Param('id') id: string) {
     return await this.questionService.downvote(id);
+  }
+
+  @Put(':id/view')
+  async view(@Param('id') id: string) {
+    return await this.questionService.viewed(id);
   }
 }

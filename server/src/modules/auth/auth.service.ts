@@ -43,8 +43,8 @@ export class AuthService {
     );
   };
 
-  verifyPassword = (passwordAttempt: string, hashedPassword: string) => {
-    return bcrypt.compare(passwordAttempt, hashedPassword);
+  verifyPassword = async (passwordAttempt: string, hashedPassword: string) => {
+    return await bcrypt.compare(passwordAttempt, hashedPassword);
   };
 
   verifyToken = (token: string) => {

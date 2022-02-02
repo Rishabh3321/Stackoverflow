@@ -1,6 +1,7 @@
 import { useHistory } from "react-router-dom";
 import Header from "../components/Layout/header";
 import api from "../services/api";
+import toast from "../utils/toast";
 
 function AskQuestion() {
 	const history = useHistory();
@@ -13,9 +14,21 @@ function AskQuestion() {
 			data[key] = value;
 		}
 		const { title, body } = data;
+
+		if (title.length < 15) {
+			toast.warning("Title must be at least 15 characters long");
+			return;
+		}
+
+		if (body.length < 15) {
+			toast.warning("Body must be at least 15 characters long");
+			return;
+		}
+
 		try {
 			const reponse = await api.post("/question/create", { title, body });
 			history.push("question/" + reponse.data.id);
+			toast.success("Question created successfully");
 		} catch (error) {
 			console.log(error);
 		}

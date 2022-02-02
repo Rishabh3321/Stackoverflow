@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode";
 import api, { setApiAuthToken } from "../services/api";
 import { login, logout } from "../utils/auth";
 import { SET_CURRENT_USER } from "./types";
+import toast from "../utils/toast";
 
 export function registerUser(userData) {
 	return async (dispatch) => {
@@ -13,11 +14,12 @@ export function registerUser(userData) {
 				setApiAuthToken(token);
 				const decoded = jwt_decode(token);
 				dispatch(setCurrentUser({ ...decoded, ...details }));
+				toast.success("Sign-up successful");
 			} else {
-				console.log("Error registering user", res.data);
+				toast.error(res.data.message);
 			}
 		} catch (err) {
-			console.log("Error registering user", err);
+			toast.error(err.response.data.message);
 		}
 	};
 }
@@ -32,11 +34,12 @@ export function loginUser(userData) {
 				setApiAuthToken(token);
 				const decoded = jwt_decode(token);
 				dispatch(setCurrentUser({ ...decoded, ...details }));
+				toast.success("Login successful");
 			} else {
-				console.log("Error loging in user", res.data);
+				toast.error("Something went wrong, try after sometime");
 			}
 		} catch (err) {
-			console.log("Error loging in user", err);
+			toast.error(err.response.data.message);
 		}
 	};
 }
@@ -52,4 +55,5 @@ export const logoutUser = () => (dispatch) => {
 	logout();
 	setApiAuthToken(false);
 	dispatch(setCurrentUser({}));
+	toast.success("Logout successful");
 };

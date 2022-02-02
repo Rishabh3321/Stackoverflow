@@ -4,6 +4,7 @@ import upvoteSvg from "../../assets/svg/upvote.svg";
 import { useCallback, useEffect, useState } from "react";
 import { countVote } from "../../utils/common";
 import api from "../../services/api";
+import toast from "../../utils/toast";
 
 function Answer({ initalData }) {
 	const [answer, setAnswer] = useState(initalData);
@@ -13,28 +14,17 @@ function Answer({ initalData }) {
 		return countVote(answer.votes);
 	}, [answer]);
 
-	const handleUpvote = async () => {
+	const handleVoting = async (vote) => {
 		try {
-			const { data } = await api.post(`/answer/${answer.id}/upvote`);
+			const { data } = await api.post(`/answer/${answer.id}/${vote}`);
 			if (data.name === "HttpException") {
-				console.log(data.message);
+				toast.error(data.message);
 			} else {
 				setAnswer(data);
+				toast.success(`You ${vote}d the answer!`);
 			}
 		} catch (err) {
-			console.log(err);
-		}
-	};
-	const handleDownvote = async () => {
-		try {
-			const { data } = await api.post(`/answer/${answer.id}/downvote`);
-			if (data.name === "HttpException") {
-				console.log(data.message);
-			} else {
-				setAnswer(data);
-			}
-		} catch (err) {
-			console.log(err);
+			toast.error("Something went wrong");
 		}
 	};
 
@@ -51,7 +41,7 @@ function Answer({ initalData }) {
 							src={upvoteSvg}
 							alt="upvote"
 							className="cursor-pointer"
-							onClick={() => handleUpvote()}
+							onClick={() => handleVoting("upvote")}
 						/>
 						<p className="pl-3 text-2xl text-gray-title">
 							{countVoteHandler(answer.votes)}
@@ -60,11 +50,11 @@ function Answer({ initalData }) {
 							src={downvoteSvg}
 							alt="downvote"
 							className="cursor-pointer"
-							onClick={() => handleDownvote()}
+							onClick={() => handleVoting("downvote")}
 						/>
 					</div>
 					<div className="w-11/12 ">
-						<div className="text-gray-title text-sm font-normal break-words whitespace-pre-wrap">
+						<div className="text-gray-title text-base font-normal break-words whitespace-pre-wrap">
 							{answer.versions.at(-1).body}
 						</div>
 						<div className="flex justify-end -mt-12">

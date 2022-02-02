@@ -24,13 +24,16 @@ export class UserService {
     }
   }
 
-  async login(data: LoginUserDto): Promise<UserDocument> {
+  async login(data: LoginUserDto): Promise<UserDocument | HttpException> {
     const userByEmail = await this.user.findOne({ email: data.email }).exec();
     if (!userByEmail) {
       throw new HttpException(`No user found with ${data.email}`, 409);
     }
-    if (this.authService.verifyPassword(data.password, userByEmail.password))
-      return userByEmail;
+    const isPasswordValid = await this.authService.verifyPassword(
+      data.password,
+      userByEmail.password,
+    );
+    if (isPasswordValid) return userByEmail;
     else throw new HttpException(`Invalid Password`, 409);
   }
 

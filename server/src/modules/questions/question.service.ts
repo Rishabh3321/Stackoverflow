@@ -70,6 +70,16 @@ export class QuestionService {
     return await this.question.findById(id).exec();
   }
 
+  async viewed(id: string): Promise<QuestionDocument | HttpException> {
+    const question = await this.question
+      .findByIdAndUpdate(id, { $inc: { views: 1 } }, { new: true })
+      .exec();
+    if (!question) {
+      return new HttpException('Question not found', 404);
+    }
+    return question;
+  }
+
   async create(data: RawQuestionDto): Promise<QuestionDocument> {
     const genesisVersion = [
       {
