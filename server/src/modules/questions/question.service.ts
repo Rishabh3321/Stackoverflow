@@ -2,7 +2,6 @@ import { HttpException, Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AuthService } from '../auth/auth.service';
 import { PaginationQueryDto } from '../common/pagination-query.dto';
 import { User, UserDocument } from '../users/user.entity';
 import { RawQuestionDto } from './question.dto';
@@ -17,7 +16,6 @@ export class QuestionService {
     private readonly question: Model<QuestionDocument>,
     @InjectModel(User.name)
     private readonly user: Model<UserDocument>,
-    private authService: AuthService,
   ) {}
 
   async findAll(query: PaginationQueryDto): Promise<any[]> {

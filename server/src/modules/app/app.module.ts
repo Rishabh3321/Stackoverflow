@@ -6,7 +6,6 @@ import jwtConfig from 'src/config/jwt.config';
 import serverConfig from 'src/config/server.config';
 import { AnswerModule } from '../answers/answer.module';
 import { AuthModule } from '../auth/auth.module';
-import { AuthService } from '../auth/auth.service';
 import { QuestionsModule } from '../questions/question.module';
 import { UsersModule } from '../users/user.module';
 import { AppController } from './app.controller';
@@ -25,6 +24,6 @@ import { AppService } from './app.service';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService],
 })
 export class AppModule {}

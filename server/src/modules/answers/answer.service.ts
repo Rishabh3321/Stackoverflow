@@ -2,7 +2,6 @@ import { HttpException, Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AuthService } from '../auth/auth.service';
 import { Question, QuestionDocument } from '../questions/question.entity';
 import { User, UserDocument } from '../users/user.entity';
 import { RawAnswerDto } from './answer.dto';
@@ -19,7 +18,6 @@ export class AnswerService {
     private readonly question: Model<QuestionDocument>,
     @InjectModel(User.name)
     private readonly user: Model<UserDocument>,
-    private authService: AuthService,
   ) {}
 
   async findAll(): Promise<AnswerDocument[]> {

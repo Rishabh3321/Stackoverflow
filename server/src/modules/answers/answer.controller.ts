@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Model } from 'mongoose';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { AuthService } from '../auth/auth.service';
 import { RawAnswerDto } from './answer.dto';
 import { Answer, AnswerDocument } from './answer.entity';
 import { AnswerService } from './answer.service';
@@ -12,7 +11,6 @@ import { AnswerService } from './answer.service';
 export class AnswerController {
   constructor(
     private answerService: AnswerService,
-    private authService: AuthService,
     @InjectModel(Answer.name) private readonly user: Model<AnswerDocument>,
   ) {}
 

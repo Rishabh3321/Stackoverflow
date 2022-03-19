@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthService } from '../auth/auth.service';
+import { AuthModule } from '../auth/auth.module';
 import { Question, QuestionSchema } from '../questions/question.entity';
 import { User, UserSchema } from '../users/user.entity';
 import { AnswerController } from './answer.controller';
@@ -14,8 +14,9 @@ import { AnswerService } from './answer.service';
       { name: Question.name, schema: QuestionSchema },
       { name: User.name, schema: UserSchema },
     ]),
+    AuthModule,
   ],
   controllers: [AnswerController],
-  providers: [AnswerService, AuthService],
+  providers: [AnswerService],
 })
 export class AnswerModule {}

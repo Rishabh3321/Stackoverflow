@@ -12,7 +12,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Model } from 'mongoose';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { AuthService } from '../auth/auth.service';
 import { PaginationQueryDto } from '../common/pagination-query.dto';
 import { RawQuestionDto } from './question.dto';
 import { Question, QuestionDocument } from './question.entity';
@@ -22,7 +21,6 @@ import { QuestionService } from './question.service';
 export class QuestionController {
   constructor(
     private questionService: QuestionService,
-    private authService: AuthService,
     @InjectModel(Question.name) private readonly user: Model<QuestionDocument>,
   ) {}
 
